@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0; /* Adiciona espaçamento vertical proporcional ao tamanho da imagem */
+            display: block; /* Garante que as margens se apliquem corretamente */
+        }
+
+        .image-container {
+            text-align: center; /* Centraliza o texto com a imagem */
+            width: 33.33%; /* Fixa o número de colunas em 3 */
+            box-sizing: border-box;
+            padding: 0 10px; /* Adiciona um espaçamento lateral */
+        }
+
+        .image-name {
+            margin-top: 5px; /* Adiciona espaçamento entre a imagem e o nome */
+        }
+
+        .pagination {
+            list-style: none;
+            display: flex;
+            gap: 5px;
+        }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .pagination a:hover {
+            background-color: #f1f1f1;
+        }
+
+        .slider-container {
+            margin-bottom: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .slider-label {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Gallery</h1>
+
+    <div class="slider-container">
+        <label for="imagesPerPage" class="slider-label">Images per Page: <span id="imagesPerPageValue">{{ images_per_page }}</span></label>
+        <input type="range" id="imagesPerPage" min="3" max="10" step="1" value="{{ images_per_page }}" oninput="updateSliderValue('imagesPerPage', 'imagesPerPageValue')">
+    </div>
+
+    <div>
+        {% for image_file in image_files %}
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='images/' + image_file) }}" alt="{{ image_file }}">
+                <p class="image-name">{{ image_file }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <ul class="pagination">
+        {% if current_page > 1 %}
+            <li><a href="{{ url_for('show_images', page=current_page-1, ipp=images_per_page) }}">Previous</a></li>
+        {% endif %}
+
+        {% for page_num in range(1, total_pages + 1) %}
+            <li><a href="{{ url_for('show_images', page=page_num, ipp=images_per_page) }}">{{ page_num }}</a></li>
+        {% endfor %}
+
+        {% if current_page < total_pages %}
+            <li><a href="{{ url_for('show_images', page=current_page+1, ipp=images_per_page) }}">Next</a></li>
+        {% endif %}
+    </ul>
+
+    <script>
+        function updateSliderValue(sliderId, displayId) {
+            const slider = document.getElementById(sliderId);
+            const display = document.getElementById(displayId);
+            display.textContent = slider.value;
+
+            // Atualiza a URL da próxima página com o valor do controle deslizante
+            const nextPageLink = document.querySelector('.pagination a[href*="Next"]');
+            if (nextPageLink) {
+                const nextPageUrl = nextPageLink.getAttribute('href').split('&')[0];
+                nextPageLink.setAttribute('href', `${nextPageUrl}&ipp=${slider.value}`);
+            }
+        }
+    </script>
+</body>
+</html>

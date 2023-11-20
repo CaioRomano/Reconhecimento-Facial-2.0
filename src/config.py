@@ -1,0 +1,19 @@
+import os
+from pathlib import Path
+
+# TIMER PARA CAPTURAR A IMAGEM DA WEBCAM
+TIMER = 3
+
+# NÍVEL DE TOLERÂNCIA PARA DAR "MATCH" NOS ROSTOS
+TOLERANCE = 0.6
+
+# NOME DE ARQUIVOS
+STREAMLIT_APP = 'app.py'
+
+# LOCALIZAÇÃO DO DIRETÓRIO RAIZ
+PATH_DIR_IMG = 'static/images'
+PATH_SRC = os.path.dirname(os.path.abspath(__file__))
+PATH_PROJECT = Path(PATH_SRC).parent
+
+# LOCALIZAÇÃO DOS DIRETÓRIOS
+DIR_IMG = PATH_PROJECT / PATH_DIR_IMG
