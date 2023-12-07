@@ -20,7 +20,7 @@
 ## -- RECOGNITION
 #
 ## iniciar Reconhecimento Facial
-#python3 run.py recognition init
+python3 run.py recognition init
 #
 ### -- IMAGES
 #
